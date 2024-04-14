@@ -42,12 +42,12 @@ DOCKER_COMMAND="docker --host=ssh://ec2-user@$INPUT_REMOTE_DOCKER_HOST:$INPUT_RE
 
 CONTAINER_ID=$(${DOCKER_COMMAND} ps -q -f name=${INPUT_CONTAINER_NAME})
 
-if [ "${INPUT_FAIL_IF_NOT_RUNNING}" = "true" ] && [ ! -z "${CONTAINER_ID}"]; then
+if [ "${INPUT_FAIL_IF_NOT_RUNNING}" == "true" ] && [ ! -z "${CONTAINER_ID}"]; then
   echo "No container for name ${INPUT_CONTAINER_NAME} found, exiting"
   exit 1
 fi
 
-if [ "${INPUT_REMOVE_IMAGE}" = "true" ]; then
+if [ "${INPUT_REMOVE_IMAGE}" == "true" ]; then
   PREVIOUS_IMAGE_ID=$(${DOCKER_COMMAND} inspect ${INPUT_CONTAINER_NAME} -f "{{ .Config.Image }}")
 fi
 
@@ -58,14 +58,14 @@ else
   echo "Stopped container ${INPUT_CONTAINER_NAME} (${REMOVED_CONTAINER_NAME})"
 fi
 
-if [ "${INPUT_REMOVE_CONTAINER-}" = "true" ]; then
+if [ "${INPUT_REMOVE_CONTAINER-}" == "true" ]; then
   echo Removing container ${INPUT_CONTAINER_NAME}
   ${DOCKER_COMMAND} rm ${INPUT_CONTAINER_NAME}
 fi
 
 EXISTING_IMAGE_COUNT=$(${DOCKER_COMMAND} images -q ${PREVIOUS_IMAGE_ID} | wc -l)
 
-if [ [ "${INPUT_REMOVE_IMAGE}" = "true" ] && [ ${EXISTING_IMAGE_COUNT} -ne 0 ] ]; then
+if [ [ "${INPUT_REMOVE_IMAGE}" == "true" ] && [ "${EXISTING_IMAGE_COUNT}" -ne 0 ] ]; then
   echo Removing previously used image ${PREVIOUS_IMAGE_ID}
   ${DOCKER_COMMAND} rmi ${PREVIOUS_IMAGE_ID}
 fi
