@@ -1,0 +1,28 @@
+name: Remote Docker Pull
+author: Tim Rowe <tim@tjsr.id.au>
+description: Pull a docker image to a remote docker daemon connected via SSH
+inputs:
+  remote_docker_host:
+    description: The hostname or IP address of the remote docker host
+    required: true
+  ssh_private_key:
+    description: The private key configured on the remote host to allow SSH access
+    required: true
+  remote_docker_user:
+    description: The username to use when connecting to the remote host
+    required: true
+  ssh_port:
+    description: The port to use when connecting to the remote host
+    required: false
+    default: 22
+  remove:
+    description: Set to true to also remove the container after stopping. Default is false.
+    required: false
+    default: false
+  container_name:
+    description: The name of the container to stop
+    required: true
+
+runs:
+  using: docker
+  image: docker://ghcr.io/tjsr/remote_docker_stop:latest
