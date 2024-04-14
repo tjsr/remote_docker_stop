@@ -55,7 +55,7 @@ if [ -z "${CONTAINER_ID}" ]; then
   echo "No container for name ${INPUT_CONTAINER_NAME} found to stop"
 else
   REMOVED_CONTAINER_NAME=$(${DOCKER_COMMAND} stop ${CONTAINER_ID})
-  echo Stopped container ${INPUT_CONTAINER_NAME} (${REMOVED_CONTAINER_NAME})
+  echo "Stopped container ${INPUT_CONTAINER_NAME} (${REMOVED_CONTAINER_NAME})"
 fi
 
 if [ "${INPUT_REMOVE_CONTAINER-}" = "true" ]; then
