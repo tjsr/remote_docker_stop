@@ -49,6 +49,9 @@ fi
 
 if [ "${INPUT_REMOVE_IMAGE}" == "true" ]; then
   PREVIOUS_IMAGE_ID=$(${DOCKER_COMMAND} inspect ${INPUT_CONTAINER_NAME} -f "{{ .Config.Image }}")
+  EXISTING_IMAGE_COUNT=$(${DOCKER_COMMAND} images -q ${PREVIOUS_IMAGE_ID} | wc -l)
+else
+  EXISTING_IMAGE_COUNT=$(${DOCKER_COMMAND} images -q ${INPUT_CONTAINER_NAME} | wc -l)
 fi
 
 if [ -z "${CONTAINER_ID}" ]; then
@@ -60,10 +63,9 @@ fi
 
 if [ "${INPUT_REMOVE_CONTAINER-}" == "true" ]; then
   echo Removing container ${INPUT_CONTAINER_NAME}
-  ${DOCKER_COMMAND} rm ${INPUT_CONTAINER_NAME}
+  REMOVED_CONTAINER_NAME=$(${DOCKER_COMMAND} rm ${INPUT_CONTAINER_NAME})
+  echo "Removed container ${INPUT_CONTAINER_NAME}"
 fi
-
-EXISTING_IMAGE_COUNT=$(${DOCKER_COMMAND} images -q ${PREVIOUS_IMAGE_ID} | wc -l)
 
 if [ [ "${INPUT_REMOVE_IMAGE}" == "true" ] && [ "${EXISTING_IMAGE_COUNT}" -ne 0 ] ]; then
   echo Removing previously used image ${PREVIOUS_IMAGE_ID}
