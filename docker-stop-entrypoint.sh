@@ -46,6 +46,7 @@ fi
 ${DOCKER_COMMAND} stop ${INPUT_CONTAINER_NAME}
 
 if [ "${INPUT_REMOVE-}" = "true" ]; then
+  echo Removing container ${INPUT_CONTAINER_NAME}
   ${DOCKER_COMMAND} rm ${INPUT_CONTAINER_NAME}
 fi
 
