@@ -26,6 +26,10 @@ inputs:
   container_name:
     description: The name of the container to stop
     required: true
+  fail_if_not_running:
+    description: The action should fail if the container is not running. Default is false.
+    required: false
+    default: false
 
 runs:
   using: docker
