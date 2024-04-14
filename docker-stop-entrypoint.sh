@@ -40,20 +40,21 @@ ssh-add ~/.ssh/id_rsa 2>/dev/null
 
 DOCKER_COMMAND="docker --host=ssh://ec2-user@$INPUT_REMOTE_DOCKER_HOST:$INPUT_REMOTE_DOCKER_PORT"
 
-if [ "${INPUT_FAIL_IF_NOT_RUNNING}" = "true" ]; then
-  if [ -z "$(${DOCKER_COMMAND} ps -q -f name=${INPUT_CONTAINER_NAME})" ]; then
-    echo "Container ${INPUT_CONTAINER_NAME} is not running"
-    exit 1
-  fi
+CONTAINER_ID=$(${DOCKER_COMMAND} ps -q -f name=${INPUT_CONTAINER_NAME})
+
+if [ [ "${INPUT_FAIL_IF_NOT_RUNNING}" = "true" ] && [ ! -z "${CONTAINER_ID}"]; then
+  echo "No container for name ${INPUT_CONTAINER_NAME} found, exiting"
+  exit 1
 fi
 
 if [ "${INPUT_REMOVE_IMAGE}" = "true" ]; then
   PREVIOUS_IMAGE_ID=$(${DOCKER_COMMAND} inspect ${INPUT_CONTAINER_NAME} -f "{{ .Config.Image }}")
 fi
 
-${DOCKER_COMMAND} stop ${INPUT_CONTAINER_NAME} || true
+REMOVED_CONTAINER_NAME=$(${DOCKER_COMMAND} stop ${CONTAINER_ID})
+echo Stopped container ${INPUT_CONTAINER_NAME} (${REMOVED_CONTAINER_NAME})
 
-if [ "${INPUT_REMOVE-}" = "true" ]; then
+if [ "${INPUT_REMOVE_CONTAINER-}" = "true" ]; then
   echo Removing container ${INPUT_CONTAINER_NAME}
   ${DOCKER_COMMAND} rm ${INPUT_CONTAINER_NAME}
 fi
