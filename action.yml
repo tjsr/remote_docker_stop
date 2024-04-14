@@ -15,8 +15,12 @@ inputs:
     description: The port to use when connecting to the remote host
     required: false
     default: 22
-  remove:
+  remove_container:
     description: Set to true to also remove the container after stopping. Default is false.
+    required: false
+    default: false
+  remove_image:
+    description: Set to true to also remove the previously used container image after stopping. Default is false.
     required: false
     default: false
   container_name:
