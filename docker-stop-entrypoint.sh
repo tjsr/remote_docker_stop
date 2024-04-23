@@ -61,7 +61,7 @@ else
   echo "Stopped container ${INPUT_CONTAINER_NAME} (${REMOVED_CONTAINER_NAME})"
 fi
 
-if [ "${INPUT_REMOVE_CONTAINER-}" == "true" ]; then
+if [ "${INPUT_REMOVE_CONTAINER=false}" == "true" ]; then
   echo Removing container ${INPUT_CONTAINER_NAME}
   REMOVED_CONTAINER_NAME=$(${DOCKER_COMMAND} rm ${INPUT_CONTAINER_NAME})
   echo "Removed container ${INPUT_CONTAINER_NAME}"
